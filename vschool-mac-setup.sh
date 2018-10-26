@@ -213,6 +213,7 @@ parse_git_branch() {
 EOL
 echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bash_profile
 
+# Todo: Add this back in when it can be tested
 # Install Mas and Xcode
 #if [ ! -d /Applications/Xcode.app ]
 #then
