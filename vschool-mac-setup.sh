@@ -19,19 +19,19 @@ sweat_drops=$'\xF0\x9F\x92\xA6'
 
 
 echo -e "${lightblue}${tada} Welcome to V School! ${tada}${clear}"
-#sleep 2
+sleep 3
 echo -e "${lightblue}I'm going to do some of the basic, mundane setup stuff for you. So let's get started! ${rocket}${clear}"
-#sleep 3
+sleep 3
 echo -e "${lightblue}Throughout this process, it may ask you for your password multiple times${clear}"
-#sleep 3
+sleep 3
 echo -e "${lightblue}When that happens, you'll type in the same password you use to log in to your computer${clear}"
-#sleep 3
+sleep 3
 echo -e "${lightblue}It will look like nothing is typing, but it is, I promise${clear}"
-#sleep 3
+sleep 3
 echo -e "${lightblue}When you've finished entering your password, press return to continue${clear}"
-#sleep 3
+sleep 3
 echo -e "${lightblue}One more thing. So I don't talk too fast, I'll let you press the return key to advance through the prompt${clear}"
-#sleep 2
+sleep 3
 read -p "${lightblue}Try it now ${hourglass} (return)${clear}"
 read -p "${lightblue}Nicely done. You're basically a real hacker already! ${space_invader} (return)${clear}"
 echo -e "${lightblue}I don't actually know your name yet! Please enter your full name (first and last) below. (return)${clear}"
