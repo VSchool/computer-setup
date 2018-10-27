@@ -10,7 +10,6 @@ then
     return 1
 fi
 
-
 # Emojis
 tada=$'\xF0\x9F\x8E\x89'
 rocket=$'\xF0\x9F\x9A\x80'
