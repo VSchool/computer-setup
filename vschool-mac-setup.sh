@@ -171,10 +171,11 @@ read -p "${lightblue}If you happened to get an error that said the SSH key is al
 read -p "${lightblue}Next we're going to install Homebrew, a package manager for Mac (return)${clear}"
 read -p "${lightblue}Basically it's a great tool for installing developer-y programs to your Mac (return)${clear}"
 read -p "${lightblue}Installing Homebrew may also install the Xcode Command Line Tools, which – FYI – can sometimes take awhile to finish (return)${clear}"
-read -p "${lightblue}Hit return to start the install, then patiently wait until you see the next blue text. ${hourglass} (return)${clear}"
+read -p "${lightblue}Hit return to start the install, then follow the directions and patiently wait until you see the next blue text. ${hourglass} (return)${clear}"
 echo -e "${lightblue}Installing Homebrew...${clear}"
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-read -p "${lightblue}Done! Let's move on ${rocket} (return)${clear}"
+read -p "${lightblue}Done! Let's move on ${rocket} (return)${clear}${newline}"
+
 # Install and set up NVM
 read -p "${lightblue}Now I'm going to install NVM, which stands for the Node Version Manager (return)${clear}"
 read -p "${lightblue}It makes installing and managing Node.js very easy (return)${clear}"
