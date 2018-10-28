@@ -54,12 +54,11 @@ read -p "${lightblue}Great! Nice to meet you ${first_name}! (return)${clear}"
 
 # Todo: Allow them to keep ZSH if that's what they're using
 # Make sure the default shell is bash
-if [[ $(echo $SHELL) != "/bin/bash" && $(echo $SHELL) != "-bash" ]]
+#if [[ $(echo $SHELL) != "/bin/bash" && $(echo $SHELL) != "-bash" ]]
+if [[ $(echo $SHELL) != "/bin/bash" ]]
 then
     echo -e "${lightblue}For simplicity, I'm switching your default shell to bash. If you want to switch back to another shell (zsh, e.g.), please speak with an instructor for help.${clear}"
     chsh -s /bin/bash
-#else
-#    echo -e "${lightblue}I just checked if you're using bash for your shell program, and it looks like you are! ${thumbs_up}${clear}"
 fi
 
 while [[ ! -d "/Applications/Google Chrome.app" ]]
