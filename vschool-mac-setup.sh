@@ -104,7 +104,7 @@ then
     echo
     read -p "${lightblue}Welcome back, ${first_name}!${clear}"
     read -p "${lightblue}So, is ${comment} the actual email address you use for GitHub? Y/n:${clear} " -n 1 response;echo
-    while [[ ! ${response} =~ ^[Yy]$ ]] && [[ ! ${response} =~ ^[Nn]$ ]]
+    while [[ ! ${response} =~ ^[Yy]$ && ! ${response} =~ ^[Nn]$ ]]
     do
         read -p "${lightblue}Whoops, I missed that. Please enter Y or N:${clear} " -n 1 response;echo
     done
