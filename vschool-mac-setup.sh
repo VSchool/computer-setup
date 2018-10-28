@@ -42,7 +42,7 @@ read -p "${lightblue}Nicely done! You're basically a real hacker already! ${spac
 read -p "${lightblue}I don't actually know your name yet! Please enter your full name (first and last):${clear} " first_name last_name
 echo
 
-while [[ -z ${first_name}  ]] || [[ -z ${last_name} ]]
+while [[ -z ${first_name} || -z ${last_name} ]]
 do
     echo -e "${lightblue}Whoops, looks like you may have entered something incorrectly${clear}"
     read -p "${lightblue}Please try again. Make sure to type both first AND last names:${clear} " first_name last_name
@@ -54,7 +54,7 @@ read -p "${lightblue}Great! Nice to meet you ${first_name}! (return)${clear}"
 
 # Todo: Allow them to keep ZSH if that's what they're using
 # Make sure the default shell is bash
-if [[ $(echo $0) != "/bin/bash" ]] && [[ $(echo $0) != "-bash" ]]
+if [[ $(echo $0) != "/bin/bash" && $(echo $0) != "-bash" ]]
 then
     echo -e "${lightblue}For simplicity, I'm switching your default shell to bash. If you want to switch back to another shell (zsh, e.g.), please speak with an instructor for help.${clear}"
     chsh -s /bin/bash
