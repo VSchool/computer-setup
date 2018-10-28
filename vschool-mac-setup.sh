@@ -70,7 +70,11 @@ do
     read -p "${lightblue}Once you've finished installing Chrome, hit return to continue. I'll know if you tried to cheat ${grimace} (return)${clear} "
 done
 
-read -p "${lightblue}Now I'll be creating an SSH key for you. (return)${clear}"
+read -p "${newline}${lightblue}Google's Chrome browser is one of the best for doing web development, so I'm going to make sure it's your default browser (return)${clear} "
+read -p "${lightblue}If you're prompted, make sure to click the \"Use Chrome\" button. If you're not prompted, it's already set! (return)${clear} "
+/usr/bin/open -a "/Applications/Google Chrome.app" --args --make-default-browser
+
+read -p "${newline}${lightblue}Now I'll be creating an SSH key for you. (return)${clear}"
 read -p "${lightblue}This is useful for communicating securely with external services, like GitHub (return)${clear}"
 
 # Check for an existing SSH Key and create a new one if it doesn't exist
@@ -90,7 +94,7 @@ then
     read -p "${lightblue}I was able to pull the email address ${comment} from your existing SSH key. (return)${clear}"
     read -p "${lightblue}(It's possible this isn't even a valid email address. I'm not smart enough to tell quite yet.) (return)${clear}"
     echo
-    read -p "${lightblue}In a minute, ${first_name}, I'll open a browser window to your GitHub settings page (return)${clear} "
+    read -p "${lightblue}In a minute, I'll open a browser window to your GitHub settings page (return)${clear} "
     read -p "${lightblue}(Just in case something goes wrong, the URL is https://github.com/settings/emails) (return)${clear} "
     read -p "${lightblue}Make sure to come back here once you've verified your email address (return)${clear}"
     read -p "${lightblue}Also, just FYI, you may have to log in to GitHub before it takes you to the settings page (return)${clear}"
@@ -100,7 +104,7 @@ then
     echo
     read -p "${lightblue}Welcome back, ${first_name}!${clear}"
     read -p "${lightblue}So, is ${comment} the actual email address you use for GitHub? Y/n:${clear} " -n 1 response;echo
-    while [[ ! ${response} =~ ^[Yy]$ && ! ${response} =~ ^[Nn]$ ]]
+    while [[ ! ${response} =~ ^[Yy]$ ]] && [[ ! ${response} =~ ^[Nn]$ ]]
     do
         read -p "${lightblue}Whoops, I missed that. Please enter Y or N:${clear} " -n 1 response;echo
     done
@@ -117,7 +121,7 @@ then
     fi
 else
     read -p "${lightblue}You don't have an SSH file yet, so let's make one now! (return)${clear}"
-    read -p "${lightblue}In a minute, ${first_name}, I'll open a browser window to your GitHub settings page (return)${clear} "
+    read -p "${lightblue}In a minute, I'll open a browser window to your GitHub settings page (return)${clear} "
     read -p "${lightblue}(Just in case something goes wrong, the URL is https://github.com/settings/emails) (return)${clear} "
     read -p "${lightblue}Make sure to come back here once you've verified your email address (return)${clear}"
     read -p "${lightblue}Also, just FYI, you may have to log in to GitHub before it takes you to the settings page (return)${clear}"
@@ -160,8 +164,7 @@ read -p "${lightblue}For the \"Title\" field, put something like \"Bob's 2016 Ma
 read -p "${lightblue}(You can put anything here that will remind you in the future which computer this SSH key is tied to) (return)${clear}"
 read -p "${lightblue}Then simply paste (⌘ + V) the SSH key (which is already copied for you) into the 'Key' input box and hit the green 'Add SSH key' button (return)${clear}"
 read -p "${lightblue}Make sure to come back here once you've added your SSH key (return)${clear}"
-read -p "${lightblue}Alright, I think you're ready ${rocket} (return)${clear}"
-read -p "${lightblue}Opening the browser now (return)${clear}"
+read -p "${lightblue}Alright, I think you're ready. ${rocket} Opening the browser now (return)${clear}"
 /usr/bin/open https://github.com/settings/ssh/new
 echo
 read -p "${lightblue}Welcome back again! How did that go? It wasn't too bad, was it?${clear}"
@@ -171,7 +174,10 @@ read -p "${lightblue}If you happened to get an error that said the SSH key is al
 read -p "${lightblue}Next we're going to install Homebrew, a package manager for Mac (return)${clear}"
 read -p "${lightblue}Basically it's a great tool for installing developer-y programs to your Mac (return)${clear}"
 read -p "${lightblue}Installing Homebrew may also install the Xcode Command Line Tools, which – FYI – can sometimes take awhile to finish (return)${clear}"
-read -p "${lightblue}Hit return to start the install, then follow the directions and patiently wait until you see the next blue text. ${hourglass} (return)${clear}"
+read -p "${lightblue}Hit return to start the install, then follow any directions you're given (return)${clear}"
+read -p "${lightblue}(like hitting return and entering your password) (return)${clear}"
+read -p "${lightblue}then just patiently wait until you see the next blue text. ${hourglass} Feel free to grab a snack or something to drink (return)${clear}"
+read -p "${lightblue}Once you see the next blue text, you're ready to move on! K, let's do this. (return)${clear}"
 echo -e "${lightblue}Installing Homebrew...${clear}"
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 read -p "${lightblue}Done! Let's move on ${rocket} (return)${clear}${newline}"

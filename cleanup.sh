@@ -6,7 +6,7 @@ newline=$'\n'
 
 echo -e "${lightblue}You should only run this script on a test computer if you're okay with lots of stuff being deleted${clear}"
 echo -e "${lightblue}You're about to uninstall lots of things and delete a bunch of folders, including the dev folder.${clear}"
-read -p "${lightblue}Are you sure you're okay with this? Type 'please clean up everything' to confirm${clear}" answer
+read -p "${lightblue}Are you sure you're okay with this? Type 'please clean up everything' to confirm:${clear} " answer
 if [[ ${answer} != "please clean up everything" ]]
 then
     echo "Canceling the script now. Nothing will be uninstalled or deleted."
@@ -63,4 +63,5 @@ else
     fi
     read -p "${lightblue}For now, you'll have to manually clean up the .bash_profile file yourself. Otherwise, everything's all cleaned up!${clear}"
 fi
-osascript -e "do shell script \"osascript -e \\\"tell application \\\\\\\"Terminal\\\\\\\" to quit\\\" &> /dev/null &\""; exit
+exit
+#osascript -e "do shell script \"osascript -e \\\"tell application \\\\\\\"Terminal\\\\\\\" to quit\\\" &> /dev/null &\""; exit
