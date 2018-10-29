@@ -23,57 +23,60 @@ mac_command_symbol=$'\xC2\x9D'
 sweat_drops=$'\xF0\x9F\x92\xA6'
 
 # Intro
-echo -e "${lightblue}${tada} Welcome to V School! ${tada}${clear}"
-sleep 3
-echo -e "${lightblue}I'm here to do some of the basic, mundane setup stuff for you. Let's get started! ${rocket}${clear}"
-sleep 3
-echo -e "${lightblue}Throughout this process, you may be asked to provide your password a few times${clear}"
-sleep 3
-echo -e "${lightblue}When that happens, you'll type in the same password you use to log in to your computer${clear}"
-sleep 3
-echo -e "${lightblue}It will look like nothing is typing, but I promise it is${clear}"
-sleep 3
-echo -e "${lightblue}When you've finished entering your password, press return to continue${clear}"
-sleep 3
-echo -e "${lightblue}One more thing... so I don't talk too fast (or slow), I'll let you press the return key to advance through the prompts from here on${clear}"
-sleep 3
-read -p "${lightblue}Try it now ${hourglass} (return)${clear}"
-read -p "${lightblue}Nicely done! You're basically a real hacker already! ${space_invader} (return)${clear}"
-read -p "${lightblue}I don't actually know your name yet! Please enter your full name (first and last):${clear} " first_name last_name
-echo
-
-while [[ -z ${first_name} || -z ${last_name} ]]
-do
-    echo -e "${lightblue}Whoops, looks like you may have entered something incorrectly${clear}"
-    read -p "${lightblue}Please try again. Make sure to type both first AND last names:${clear} " first_name last_name
-    echo
-done
-
-# Todo: Add a check to make sure they're happy with the name they put in
-read -p "${lightblue}Great! Nice to meet you ${first_name}! (return)${clear}"
-
-# Todo: Allow them to keep ZSH if that's what they're using
-# Make sure the default shell is bash
-#if [[ $(echo $SHELL) != "/bin/bash" && $(echo $SHELL) != "-bash" ]]
-if [[ $(echo $SHELL) != "/bin/bash" ]]
-then
-    echo -e "${lightblue}For simplicity, I'm switching your default shell to bash. If you want to switch back to another shell (zsh, e.g.), please speak with an instructor for help.${clear}"
-    chsh -s /bin/bash
-fi
-
-while [[ ! -d "/Applications/Google Chrome.app" ]]
-do
-    read -p "${lightblue}Before we get too much further, I noticed that it looks like you may not have the Google Chrome browser installed yet. (return)${clear} "
-    read -p "${lightblue}Let's go download it now. Hit return to open a browser to the download page. I'll wait here. ${hourglass} (return)${clear} "
-    /usr/bin/open https://www.google.com/chrome/
-    read -p "${lightblue}Once you've finished installing Chrome, hit return to continue. I'll know if you tried to cheat ${grimace} (return)${clear} "
-done
+#echo -e "${lightblue}${tada} Welcome to V School! ${tada}${clear}"
+#sleep 3
+#echo -e "${lightblue}I'm here to do some of the basic, mundane setup stuff for you. Let's get started! ${rocket}${clear}"
+#sleep 3
+#echo -e "${lightblue}Throughout this process, you may be asked to provide your password a few times${clear}"
+#sleep 3
+#echo -e "${lightblue}When that happens, you'll type in the same password you use to log in to your computer${clear}"
+#sleep 3
+#echo -e "${lightblue}It will look like nothing is typing, but I promise it is${clear}"
+#sleep 3
+#echo -e "${lightblue}When you've finished entering your password, press return to continue${clear}"
+#sleep 3
+#echo -e "${lightblue}One more thing... so I don't talk too fast (or slow), I'll let you press the return key to advance through the prompts from here on${clear}"
+#sleep 3
+#read -p "${lightblue}Try it now ${hourglass} (return)${clear}"
+#read -p "${lightblue}Nicely done! You're basically a real hacker already! ${space_invader} (return)${clear}"
+#read -p "${lightblue}I don't actually know your name yet! Please enter your full name (first and last):${clear} " first_name last_name
+#echo
+#
+#while [[ -z ${first_name} || -z ${last_name} ]]
+#do
+#    echo -e "${lightblue}Whoops, looks like you may have entered something incorrectly${clear}"
+#    read -p "${lightblue}Please try again. Make sure to type both first AND last names:${clear} " first_name last_name
+#    echo
+#done
+#
+## Todo: Add a check to make sure they're happy with the name they put in
+#read -p "${lightblue}Great! Nice to meet you ${first_name}! (return)${clear}"
+#
+## Todo: Allow them to keep ZSH if that's what they're using
+## Make sure the default shell is bash
+##if [[ $(echo $SHELL) != "/bin/bash" && $(echo $SHELL) != "-bash" ]]
+#if [[ $(echo $SHELL) != "/bin/bash" ]]
+#then
+#    echo -e "${lightblue}For simplicity, I'm switching your default shell to bash. If you want to switch back to another shell (zsh, e.g.), please speak with an instructor for help.${clear}"
+#    chsh -s /bin/bash
+#fi
+#
+#while [[ ! -d "/Applications/Google Chrome.app" ]]
+#do
+#    read -p "${lightblue}Before we get too much further, I noticed that it looks like you may not have the Google Chrome browser installed yet. (return)${clear} "
+#    read -p "${lightblue}Let's go download it now. Hit return to open a browser to the download page. I'll wait here. ${hourglass} (return)${clear} "
+#    /usr/bin/open https://www.google.com/chrome/
+#    read -p "${lightblue}Once you've finished installing Chrome, hit return to continue. I'll know if you tried to cheat ${grimace} (return)${clear} "
+#done
 
 read -p "${newline}${lightblue}Google's Chrome browser is one of the best for doing web development, so I'm going to make sure it's your default browser (return)${clear} "
-read -p "${lightblue}If you're prompted, make sure to click the \"Use Chrome\" button. If you're not prompted, it's already set! (return)${clear} "
+read -p "${lightblue}If you see a popup box with the option to \"Use Chrome\", please select it (return)${clear} "
+read -p "${lightblue}If Chrome opens and nothing happens within 2 seconds, you're already set. Just come back to Terminal to continue.(return)${clear} "
+read -p "${lightblue}Alright, hit return to open Chrome (return)${clear} "
 /usr/bin/open -a "/Applications/Google Chrome.app" --args --make-default-browser
 
-read -p "${newline}${lightblue}Now I'll be creating an SSH key for you. (return)${clear}"
+read -p "${newline}${lightblue}Welcome back! (return)${clear}"
+read -p "${lightblue}Now I'll be creating an SSH key for you. (return)${clear}"
 read -p "${lightblue}This is useful for communicating securely with external services, like GitHub (return)${clear}"
 
 # Check for an existing SSH Key and create a new one if it doesn't exist
@@ -128,7 +131,7 @@ else
 
     /usr/bin/open https://github.com/settings/emails
 
-    read -p "${lightblue}Please enter the email address you use for GitHub, as found on your GitHub settings page:${clear} " email
+    read -p "${newline}${lightblue}Welcome back! Please enter the email address you use for GitHub, as found on your GitHub settings page:${clear} " email
 
     # If entered email is empty, keep asking for email
     while [ -z ${email} ]
