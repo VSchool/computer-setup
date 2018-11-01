@@ -48,6 +48,7 @@ do
     read -p "${lightblue}Please try again. Make sure to type both first AND last names:${clear} " first_name last_name
     echo
 done
+
 #
 ## Todo: Add a check to make sure they're happy with the name they put in
 #read -p "${lightblue}Great! Nice to meet you ${first_name}! (return)${clear}"
@@ -55,7 +56,7 @@ done
 ## Todo: Allow them to keep ZSH if that's what they're using
 ## Make sure the default shell is bash
 #if [[ $(echo $SHELL) != "/bin/bash" && $(echo $SHELL) != "-bash" ]]
-if [[ $(echo $SHELL) != "/bin/bash" ]]
+if [[ ! $(echo $SHELL) =~ "bash" ]]
 then
     echo -e "${lightblue}For simplicity, I'm switching your default shell to bash. If you want to switch back to another shell (zsh, e.g.), please speak with an instructor for help.${clear}"
     chsh -s /bin/bash
@@ -69,13 +70,13 @@ do
     read -p "${lightblue}Once you've finished installing Chrome, hit return to continue. I'll know if you tried to cheat ${grimace} (return)${clear} "
 done
 
-read -p "${newline}${lightblue}Google's Chrome browser is one of the best for doing web development, so I'm going to make sure it's your default browser (return)${clear} "
-read -p "${lightblue}If you see a popup box with the option to \"Use Chrome\", please select it (return)${clear} "
-read -p "${lightblue}If Chrome opens and nothing happens within 2 seconds, you're already set. Just come back to Terminal to continue.(return)${clear} "
-read -p "${lightblue}Alright, hit return to open Chrome (return)${clear} "
-/usr/bin/open -a "/Applications/Google Chrome.app" --args --make-default-browser
-
-read -p "${newline}${lightblue}Welcome back! (return)${clear}"
+#read -p "${newline}${lightblue}Google's Chrome browser is one of the best for doing web development, so I'm going to make sure it's your default browser (return)${clear} "
+#read -p "${lightblue}If you see a popup box with the option to \"Use Chrome\", please select it (return)${clear} "
+#read -p "${lightblue}If Chrome opens and nothing happens within 2 seconds, you're already set. Just come back to Terminal to continue.(return)${clear} "
+#read -p "${lightblue}Alright, hit return to open Chrome (return)${clear} "
+#/usr/bin/open -a "/Applications/Google Chrome.app" --args --make-default-browser
+#
+#read -p "${newline}${lightblue}Welcome back! (return)${clear}"
 read -p "${lightblue}Now I'll be creating an SSH key for you. (return)${clear}"
 read -p "${lightblue}This is useful for communicating securely with external services, like GitHub (return)${clear}"
 
