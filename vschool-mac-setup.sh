@@ -57,12 +57,12 @@ done
 #
 ## Todo: Allow them to keep ZSH if that's what they're using
 ## Make sure the default shell is bash
-#if [[ $(echo $SHELL) != "/bin/bash" && $(echo $SHELL) != "-bash" ]]
+#if [[ $(echo $0) != "/bin/bash" && $(echo $0) != "-bash" ]]
 
-if [[ ! $(echo $SHELL) =~ "bash" ]]
+if [[ ! $(echo $0) =~ "zsh" ]]
 then
-    echo -e "${lightblue}For simplicity, I'm switching your default shell to bash. If you want to switch back to another shell (zsh, e.g.), please speak with an instructor for help.${clear}"
-    chsh -s /bin/bash
+    echo -e "${lightblue}For simplicity, I'm switching your default shell to zsh. If you want to switch back to another shell (bash, e.g.), please speak with an instructor for help.${clear}"
+    chsh -s /bin/zsh
 fi
 
 while [[ ! -d "/Applications/Google Chrome.app" ]]
@@ -202,17 +202,27 @@ read -p "${lightblue}Done! Let's move on ${rocket} (return)${clear}${newline}"
 # Install and set up NVM
 echo -e "${lightblue}Now I'm going to install NVM, which stands for the Node Version Manager${clear}"
 echo -e "${lightblue}It makes installing and managing Node.js very easy${clear}"
-echo -e "${lightblue}(It's okay if you're not sure what Node.js is, you'll learn all that in great detail later in the course)${clear}"
+echo -e "${lightblue}(It's okay if you're not sure what Node.js is, you'll learn all that in great detail later)${clear}"
 read -p "${green}Hit return to start the install. Remember to wait until you see the blue text again! (return)${clear}"
 echo
 echo -e "${lightblue}Installing NVM...${clear}"
 brew install nvm
-mkdir ~/.nvm
+mkdir -p ~/.nvm
+mkdir -p ~/.zsh
+
+cat >> ~/.zshenv << EOL
+export NVM_DIR="$HOME/.nvm"
+. "/usr/local/opt/nvm/nvm.sh"${newline}
+EOL
+
+# For legacy uses, in case switch back to bash
 cat >> ~/.bash_profile << EOL
 export NVM_DIR="$HOME/.nvm"
 . "/usr/local/opt/nvm/nvm.sh"${newline}
 EOL
 
+# TODO: check if these are even necessary
+source ~/.zshenv
 source ~/.bash_profile
 
 # Install the latest stable version of node.js
@@ -234,9 +244,17 @@ sleep 2
 echo -e "${lightblue}Setting up git completion and branch in prompt...${clear}"
 
 # The official one had a bug in it from the latest update, so we've copied the original to our S3 account
-#curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
+# curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash
+
+# Still install git bash completion for legacy computers
 curl https://s3.amazonaws.com/v-school/tools/git-completion.bash -o ~/.git-completion.bash
 
+# zsh comes with completion built in, just need to enable it.
+# if [[ $(echo $0) =~ "zsh" ]]
+# then
+# fi
+
+# Add git bash completion scripts to bash_profile
 cat >> ~/.bash_profile << EOL
 # Git tab completion
 if [ -f ~/.git-completion.bash ]; then
@@ -249,9 +267,15 @@ parse_git_branch() {
 }
 
 EOL
+
+# Update prompt in bash
 echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bash_profile
 
-# Todo: Add this back in when it can be tested
+# Update prompt in zsh
+echo 'export PROMPT="%B%F{blue}%~%f%b $ "' >> ~/.zshrc
+echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
+
+# TODO: Add this back in when it can be tested
 # Install Mas and Xcode
 #if [ ! -d /Applications/Xcode.app ]
 #then
