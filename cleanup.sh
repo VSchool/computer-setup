@@ -16,6 +16,7 @@ else
     #brew uninstall bash-completion
     rm -rf ~/.ssh/
     rm -rf ~/.nvm/
+    rm -rf ~/.zsh/
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
     #> ~/.bash_profile
 
