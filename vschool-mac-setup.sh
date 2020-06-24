@@ -6,13 +6,13 @@ green=$'\e[97;42m'
 clear=$'\e[0m'
 newline=$'\n'
 
-# if [[ $(uname -s) != Darwin ]]
+# if [[ $OSTYPE == darwin* ]]
 # then
 #     # use this if statement to check if the script is being run in Linux or mac.
 #     # Try to only put it around OS-specific portions to avoid duplicated code
 #     # read -p "${lightblue}Sorry, this script will currently only work on a Mac. Hit return to exit.${clear}"
 #     # return 1
-# elif [[ $(uname -s) != Linux ]]
+# elif [[ $OSTYPE == linux* ]]
 # then
 #     # Do Linux commands here
 # fi
@@ -39,6 +39,7 @@ echo -e "--------------------------------------------------------"
 echo -e "It will look like nothing is typing, but I promise it is"
 echo -e "--------------------------------------------------------"
 echo -e "When you've finished entering your password, press return to continue"
+echo -e "Also, if you're prompted to enter [Y/n], just type 'Y' and hit enter."
 echo -e "One more thing... every now and then I'll have you press the return key to advance through the prompts"
 read -p "Try it now ${hourglass} (return)${clear}"
 echo
@@ -83,14 +84,14 @@ done
 echo -e "${lightblue}Nice to meet you, ${first_name}!"
 
 # Install some extra dependencies if they're running Linux
-if [[ $(uname -s) != Linux ]]
+if [[ $OSTYPE == linux* ]]
 then
     echo -e "It looks like you're using a Linux machine."
     echo -e "In order for this setup to continue correctly, I'm going to need to install a few things first"
     echo -e "When you're prompted to enter a password, you'll enter the password you created when you set up"
-    echo -e "your Linux distribution. If you're using Windows Subsystem for Linux, this is NOT you Windows password"
+    echo -e "your Linux distribution. If you're using Windows Subsystem for Linux, this is NOT your Windows password"
     echo -e "but the Linux/Ubuntu password you set up when you first installed it."
-    echo -e "Also, IT WILL LOOK LIKE NOTHING IS TYPING, but it really is. Hit enter when you're done entering your password"
+    echo -e "Also, IT WILL LOOK LIKE NOTHING IS TYPING, but it really is. Hit enter when you're done entering your password${clear}"
     
     sudo apt-get update
     sudo apt-get install xdg-utils xclip openssh-client build-essential
@@ -98,7 +99,7 @@ fi
 
 
 # SSH Key
-echo -e "Now I'll be creating an SSH key for you."
+echo -e "${lightblue}Now I'll be creating an SSH key for you."
 read -p "This is useful for communicating securely with external services, like GitHub (return)${clear}"
 
 # If SSH Key already exists
@@ -127,10 +128,10 @@ then
     read -p "${green}Okay, for real this time. Hit return to open the GitHub settings page (return)${clear}"
 
     # Open Github in a browser
-    if [[ $(uname -s) != Darwin ]]
+    if [[ $OSTYPE == darwin* ]]
     then
         /usr/bin/open https://github.com/settings/emails
-    elif [[ $(uname -s) != Linux ]]
+    elif [[ $OSTYPE == linux* ]]
     then
         xdg-open https://github.com/settings/emails
     fi
@@ -156,19 +157,20 @@ then
 
 # If no existing SSH key found, need to create a new one
 else
+    sleep 1
     echo
-    echo -e "${lightblue}You don't have an SSH file yet, so let's make one now!"
-    echo -e "In a minute, I'll open a browser window to your GitHub settings page "
+    echo -e "${lightblue}Yup, just checked and it looks like you don't have an SSH file yet, so let's make one now!"
+    echo -e "In a minute, I'll open a browser window to your GitHub settings page."
     echo -e "(Just in case something goes wrong, the URL is https://github.com/settings/emails) "
     echo -e "Make sure to come back here once you've verified your email address"
     echo -e "Also, just FYI, you may have to log in to GitHub before it takes you to the settings page${clear}"
     read -p "${green}Okay, for real this time. Hit return to open the GitHub settings page (return)${clear}"
 
     # Open Github in a browser
-    if [[ $(uname -s) != Darwin ]]
+    if [[ $OSTYPE == darwin* ]]
     then
         /usr/bin/open https://github.com/settings/emails
-    elif [[ $(uname -s) != Linux ]]
+    elif [[ $OSTYPE == linux* ]]
     then
         xdg-open https://github.com/settings/emails
     fi
@@ -197,10 +199,10 @@ fi
 
 # Copy the SSH Key to the clipboard
 # WARNING - not sure if the nested IF below will work correctly
-if [[ $(uname -s) != Darwin ]]
+if [[ $OSTYPE == darwin* ]]
 then
     pbcopy < ~/.ssh/id_rsa.pub
-elif [[ $(uname -s) != Linux ]]
+elif [[ $OSTYPE == linux* ]]
 then
     if clip.exe < ~/.ssh/id_rsa.pub
     then
@@ -218,22 +220,22 @@ echo -e "Here's what you're going to do on your end (it's pretty easy):"
 echo -e "The browser will open to the 'new SSH key' page on GitHub"
 echo -e "For the \"Title\" field, put something like \"Bob's 2016 Macbook Pro\""
 echo -e "(You can put anything here that will remind you in the future which computer this SSH key is tied to)"
-echo -e "Then simply paste (⌘ + V) the SSH key (which is already copied for you) into the 'Key' input box and hit the green 'Add SSH key' button${clear}"
+echo -e "Then simply paste (⌘ + V) the SSH key (which is already copied for you) into the 'Key' input box and hit the green 'Add SSH key' button"
 echo -e "Make sure to come back here once you've added your SSH key${clear}"
 read -p "${green}Alright, I think you're ready. ${rocket} Opening the browser now (return)${clear}"
 
 # Open Github to new SSH Key page
-if [[ $(uname -s) != Darwin ]]
+if [[ $OSTYPE == darwin* ]]
 then
     /usr/bin/open https://github.com/settings/ssh/new
-elif [[ $(uname -s) != Linux ]]
+elif [[ $OSTYPE == linux* ]]
 then
     xdg-open https://github.com/settings/ssh/new
 fi
 
 echo
 echo -e "${lightblue}Welcome back again! How did that go? It wasn't too bad, was it?"
-echo -e "If you happened to get an error that said the SSH key is already in use, that's not a problem and you're all set!)${clear}"
+echo -e "If you happened to get an error that said the SSH key is already in use, that's not a problem and you're all set!)"
 echo
 
 # Install Homebrew
@@ -245,11 +247,11 @@ echo -e "(like hitting RETURN and entering your password. And remember, it won't
 echo -e "then just patiently wait until you see the next blue text. ${hourglass}${clear}"
 read -p "${green}Once you see the next blue text, you're ready to move on! K, let's do this. (return)${clear}"
 echo
-echo -e "${lightblue}Installing Homebrew..."
+echo -e "${lightblue}Installing Homebrew...${clear}"
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
-if [[ $(uname -s) != Linux ]]
+if [[ $OSTYPE == linux* ]]
 then
     test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
     test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
@@ -257,7 +259,7 @@ then
     echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 fi
 
-read -p "Done! Let's move on ${rocket} (return)${newline}"
+read -p "${lightblue}Done! Let's move on ${rocket} (return)${newline}"
 
 # Install and set up NVM
 echo -e "Now I'm going to install NVM, which stands for the Node Version Manager"
@@ -267,32 +269,38 @@ read -p "${green}Hit return to start the install. Remember to wait until you see
 echo
 echo -e "${lightblue}Installing NVM...${clear}"
 
-if [[ $(uname -s) != Darwin ]]
+if [[ $OSTYPE == darwin* ]]
 then
     brew install nvm
     mkdir -p ~/.nvm
     mkdir -p ~/.zsh
-elif [[ $(uname -s) != Linux ]]
+elif [[ $OSTYPE == linux* ]]
 then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
     mkdir -p ~/.nvm
     mkdir -p ~/.zsh
 fi
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
 cat >> ~/.zshenv << EOL
 export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"${newline}
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"${newline}
 EOL
 
 # For legacy uses, in case switch back to bash
 cat >> ~/.bash_profile << EOL
 export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"${newline}
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"${newline}
 EOL
 
 # TODO: check if these are even necessary
-source ~/.zshenv
-source ~/.bash_profile
+# source ~/.zshenv
+# source ~/.bash_profile
 
 # Install the latest stable version of node.js
 echo -e "${lightblue}${sweat_smile} You're enjoying watching me do all the work, aren't you?"
