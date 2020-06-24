@@ -81,10 +81,27 @@ done
 # done
 
 echo -e "${lightblue}Nice to meet you, ${first_name}!"
+
+# Install some extra dependencies if they're running Linux
+if [[ $(uname -s) != Linux ]]
+then
+    echo -e "It looks like you're using a Linux machine."
+    echo -e "In order for this setup to continue correctly, I'm going to need to install a few things first"
+    echo -e "When you're prompted to enter a password, you'll enter the password you created when you set up"
+    echo -e "your Linux distribution. If you're using Windows Subsystem for Linux, this is NOT you Windows password"
+    echo -e "but the Linux/Ubuntu password you set up when you first installed it."
+    echo -e "Also, IT WILL LOOK LIKE NOTHING IS TYPING, but it really is. Hit enter when you're done entering your password"
+    
+    sudo apt-get update
+    sudo apt-get install xdg-utils xclip openssh-client build-essential
+fi
+
+
+# SSH Key
 echo -e "Now I'll be creating an SSH key for you."
 read -p "This is useful for communicating securely with external services, like GitHub (return)${clear}"
 
-# Check for an existing SSH Key and create a new one if it doesn't exist
+# If SSH Key already exists
 if [[ -f ~/.ssh/id_rsa.pub ]]
 then
     echo
@@ -109,7 +126,15 @@ then
     echo -e "Also, just FYI, you may have to log in to GitHub before it takes you to the settings page (return)${clear}"
     read -p "${green}Okay, for real this time. Hit return to open the GitHub settings page (return)${clear}"
 
-    /usr/bin/open https://github.com/settings/emails
+    # Open Github in a browser
+    if [[ $(uname -s) != Darwin ]]
+    then
+        /usr/bin/open https://github.com/settings/emails
+    elif [[ $(uname -s) != Linux ]]
+    then
+        xdg-open https://github.com/settings/emails
+    fi
+
     echo
     echo -e "${lightblue}Welcome back, ${first_name}!${clear}"
     read -p "${green}So, is ${comment} the actual email address you use for GitHub? Y/n:${clear} " response;echo
@@ -125,9 +150,11 @@ then
     elif [[ ${response} =~ ^[Nn]$ ]]
     then
         read -p "${green}Okay, no problem. Please enter the email address you use for GitHub:${clear} " email
-        ssh-keygen -f ~/.ssh/id_rsa -o -c -C ${email}
+        ssh-keygen -f ~/.ssh/id_rsa -c -C ${email}
         read -p "${lightblue}Alright, I've updated your SSH key to contain the correct email address! (return)${clear}"
     fi
+
+# If no existing SSH key found, need to create a new one
 else
     echo
     echo -e "${lightblue}You don't have an SSH file yet, so let's make one now!"
@@ -137,7 +164,14 @@ else
     echo -e "Also, just FYI, you may have to log in to GitHub before it takes you to the settings page${clear}"
     read -p "${green}Okay, for real this time. Hit return to open the GitHub settings page (return)${clear}"
 
-    /usr/bin/open https://github.com/settings/emails
+    # Open Github in a browser
+    if [[ $(uname -s) != Darwin ]]
+    then
+        /usr/bin/open https://github.com/settings/emails
+    elif [[ $(uname -s) != Linux ]]
+    then
+        xdg-open https://github.com/settings/emails
+    fi
 
     read -p "${newline}${green}Welcome back! Please enter the email address you use for GitHub, as found on your GitHub settings page:${clear} " email
 
@@ -162,9 +196,21 @@ else
 fi
 
 # Copy the SSH Key to the clipboard
-pbcopy < ~/.ssh/id_rsa.pub
+# WARNING - not sure if the nested IF below will work correctly
+if [[ $(uname -s) != Darwin ]]
+then
+    pbcopy < ~/.ssh/id_rsa.pub
+elif [[ $(uname -s) != Linux ]]
+then
+    if clip.exe < ~/.ssh/id_rsa.pub
+    then
+        echo
+    else
+        xclip -selection clipboard -in ~/.ssh/id_rsa.pub
+        echo
+    fi
+fi
 
-echo
 echo -e "${lightblue}I copied your new SSH key to your clipboard for you"
 echo -e "Next, you'll need to add it to your GitHub SSH keys"
 echo -e "In a minute, I'm going to open the browser again for you "
@@ -176,7 +222,14 @@ echo -e "Then simply paste (⌘ + V) the SSH key (which is already copied for yo
 echo -e "Make sure to come back here once you've added your SSH key${clear}"
 read -p "${green}Alright, I think you're ready. ${rocket} Opening the browser now (return)${clear}"
 
-/usr/bin/open https://github.com/settings/ssh/new
+# Open Github to new SSH Key page
+if [[ $(uname -s) != Darwin ]]
+then
+    /usr/bin/open https://github.com/settings/ssh/new
+elif [[ $(uname -s) != Linux ]]
+then
+    xdg-open https://github.com/settings/ssh/new
+fi
 
 echo
 echo -e "${lightblue}Welcome back again! How did that go? It wasn't too bad, was it?"
@@ -184,8 +237,8 @@ echo -e "If you happened to get an error that said the SSH key is already in use
 echo
 
 # Install Homebrew
-echo -e "Next we're going to install Homebrew, a package manager for Mac"
-echo -e "Basically it's a great tool for installing developer-y programs to your Mac"
+echo -e "Next we're going to install Homebrew, a really awesome package manager"
+echo -e "Basically it's a great tool for installing developer-y programs to your computer"
 echo -e "This step can sometimes take awhile to finish"
 echo -e "Hit return to start the install, then follow any directions you're given"
 echo -e "(like hitting RETURN and entering your password. And remember, it won't look like your password is typing, but it is)"
@@ -194,7 +247,15 @@ read -p "${green}Once you see the next blue text, you're ready to move on! K, le
 echo
 echo -e "${lightblue}Installing Homebrew..."
 
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+if [[ $(uname -s) != Linux ]]
+then
+    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+    test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+fi
 
 read -p "Done! Let's move on ${rocket} (return)${newline}"
 
@@ -205,9 +266,18 @@ echo -e "(It's okay if you're not sure what Node.js is, you'll learn all that in
 read -p "${green}Hit return to start the install. Remember to wait until you see the blue text again! (return)${clear}"
 echo
 echo -e "${lightblue}Installing NVM...${clear}"
-brew install nvm
-mkdir -p ~/.nvm
-mkdir -p ~/.zsh
+
+if [[ $(uname -s) != Darwin ]]
+then
+    brew install nvm
+    mkdir -p ~/.nvm
+    mkdir -p ~/.zsh
+elif [[ $(uname -s) != Linux ]]
+then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    mkdir -p ~/.nvm
+    mkdir -p ~/.zsh
+fi
 
 cat >> ~/.zshenv << EOL
 export NVM_DIR="$HOME/.nvm"
@@ -274,19 +344,7 @@ echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bash
 echo 'export PROMPT="%B%F{blue}%~%f%b $ "' >> ~/.zshrc
 echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
 
-# TODO: Add this back in when it can be tested
-# Install Mas and Xcode
-#if [ ! -d /Applications/Xcode.app ]
-#then
-#    brew install mas  # For installing app store apps from bash
-#    mas install 497799835  # Xcode app store id number
-#fi
-#
-#sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer/
-#sudo xcodebuild -license accept
-
+# DONE!
 echo -e "${lightblue}${sweat_smile} Alright! That's everything!"
 echo -e "It's been nice working with you, ${first_name}!${clear}"
-read -p "${green}Hit return to close the Terminal app. Once you reopen it, everything should be all set up for you. Now, go make the most of your time at V School!${clear}"
-
-osascript -e "do shell script \"osascript -e \\\"tell application \\\\\\\"Terminal\\\\\\\" to quit\\\" &> /dev/null &\""; exit
+read -p "${green}The last thing you'll need to do is close out your Terminal window. The next time you open it, everything should be all set up for you! Now, go make the most of your time at V School!${clear}"
