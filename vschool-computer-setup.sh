@@ -6,17 +6,6 @@ green=$'\e[97;42m'
 clear=$'\e[0m'
 newline=$'\n'
 
-# if [[ $OSTYPE == darwin* ]]
-# then
-#     # use this if statement to check if the script is being run in Linux or mac.
-#     # Try to only put it around OS-specific portions to avoid duplicated code
-#     # read -p "${lightblue}Sorry, this script will currently only work on a Mac. Hit return to exit.${clear}"
-#     # return 1
-# elif [[ $OSTYPE == linux* ]]
-# then
-#     # Do Linux commands here
-# fi
-
 # Emojis
 tada=$'\xF0\x9F\x8E\x89'
 rocket=$'\xF0\x9F\x9A\x80'
@@ -56,31 +45,6 @@ do
     echo
 done
 
-#
-## Todo: Add a check to make sure they're happy with the name they put in
-#read -p "${lightblue}Great! Nice to meet you ${first_name}! (return)${clear}"
-#
-## Todo: Allow them to keep ZSH if that's what they're using
-## Make sure the default shell is bash
-#if [[ $(echo $0) != "/bin/bash" && $(echo $0) != "-bash" ]]
-
-
-# UPDATE: I don't think this is actually necessary as a part of the script. Removing it for now
-# if [[ ! $(echo $0) =~ "zsh" ]]
-# then
-#     echo -e "${lightblue}For simplicity, I'm switching your default shell to zsh. If you want to switch back to another shell (bash, e.g.), please speak with an instructor for help.${clear}"
-#     chsh -s /bin/zsh
-# fi
-
-# UPDATE: I don't think this is actually necessary as a part of the script. Removing it for now
-# while [[ ! -d "/Applications/Google Chrome.app" ]]
-# do
-#     echo -e "${lightblue}It looks like you may not have the Google Chrome browser installed yet.${clear} "
-#     read -p "${red}Let's go download it now. Hit return to open a browser to the download page. I'll wait here. ${hourglass} (return)${clear} "
-#     /usr/bin/open https://www.google.com/chrome/
-#     read -p "${red}Once you've finished installing Chrome, hit return to continue. I'll know if you tried to cheat! ${grimace} (return)${clear} "
-# done
-
 echo -e "${lightblue}Nice to meet you, ${first_name}!"
 
 # Install some extra dependencies if they're running Linux
@@ -96,7 +60,6 @@ then
     sudo apt-get update
     sudo apt-get install xdg-utils xclip openssh-client build-essential
 fi
-
 
 # SSH Key
 echo -e "${lightblue}Now I'll be creating an SSH key for you."
@@ -327,9 +290,6 @@ echo -e "Setting up git completion and branch in prompt...${clear}"
 curl https://s3.amazonaws.com/v-school/tools/git-completion.bash -o ~/.git-completion.bash
 
 # zsh comes with completion built in, just need to enable it.
-# if [[ $(echo $0) =~ "zsh" ]]
-# then
-# fi
 
 # Add git bash completion scripts to bash_profile
 cat >> ~/.bash_profile << EOL
