@@ -339,7 +339,7 @@ then
     echo "Prompt update code is already in the ~/.bash_profile file. Skipping..."
 else
     echo "Prompt update code is NOT YET in the ~/.bash_profile file. Setting up now..."
-    echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "\n\n' >> ~/.bash_profile
+    echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bash_profile
 fi
 
 # Update prompt in zsh
