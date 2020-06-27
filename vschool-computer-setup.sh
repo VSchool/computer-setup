@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Text colors
 lightblue=$'\e[97;104m'
 red=$'\e[97;41m'
 green=$'\e[97;42m'
@@ -183,7 +184,7 @@ echo -e "Here's what you're going to do on your end (it's pretty easy):"
 echo -e "The browser will open to the 'new SSH key' page on GitHub"
 echo -e "For the \"Title\" field, put something like \"Bob's 2016 Macbook Pro\""
 echo -e "(You can put anything here that will remind you in the future which computer this SSH key is tied to)"
-echo -e "Then simply paste (⌘ + V) the SSH key (which is already copied for you) into the 'Key' input box and hit the green 'Add SSH key' button"
+echo -e "Then simply paste (⌘/ctrl + V) the SSH key (which is already copied for you) into the 'Key' input box and hit the green 'Add SSH key' button"
 echo -e "Make sure to come back here once you've added your SSH key${clear}"
 read -p "${green}Alright, I think you're ready. ${rocket} Opening the browser now (return)${clear}"
 
@@ -218,8 +219,20 @@ if [[ $OSTYPE == linux* ]]
 then
     test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
     test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-    test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+
+    if grep -Fq '/bin/brew shellenv' ~/.bash_profile
+    then
+        echo "Linuxbrew setup lines are already in the ~/.bash_profile file. Skipping..."
+    else
+        test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)${newline}" >>~/.bash_profile
+    fi
+
+    if grep -Fq '/bin/brew shellenv' ~/.profile
+    then
+        echo "Linuxbrew setup lines are already in the ~/.profile file. Skipping..."
+    else
+        echo "eval \$($(brew --prefix)/bin/brew shellenv)${newline}" >>~/.profile
+    fi 
 fi
 
 read -p "${lightblue}Done! Let's move on ${rocket} (return)${newline}"
@@ -232,38 +245,45 @@ read -p "${green}Hit return to start the install. Remember to wait until you see
 echo
 echo -e "${lightblue}Installing NVM...${clear}"
 
-if [[ $OSTYPE == darwin* ]]
-then
-    brew install nvm
-    mkdir -p ~/.nvm
-    mkdir -p ~/.zsh
-elif [[ $OSTYPE == linux* ]]
-then
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-    mkdir -p ~/.nvm
-    mkdir -p ~/.zsh
-fi
-
+# Install NVM according to https://github.com/nvm-sh/nvm#install--update-script
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-cat >> ~/.zshenv << EOL
+mkdir -p ~/.zsh
+
+if grep -Fq 'export NVM_DIR=' ~/.zshrc
+then
+    echo "NVM setup lines are already in the ~/.zshrc file. Skipping..."
+else
+
+echo "NVM setup lines are NOT YET in the ~/.zshrc. Setting up now..."
+cat >> ~/.zshrc << EOL
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"${newline}
 EOL
 
-# For legacy uses, in case switch back to bash
+fi
+
+if grep -Fq 'export NVM_DIR=' ~/.bash_profile
+then
+    echo "NVM setup lines are already in the ~/.bash_profile file. Skipping..."
+else
+echo "NVM setup lines are NOT YET in the ~/.bash_profile. Setting up now..."
+
 cat >> ~/.bash_profile << EOL
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"${newline}
 EOL
 
+fi
+
 # TODO: check if these are even necessary
-# source ~/.zshenv
-# source ~/.bash_profile
+source ~/.zshrc
+source ~/.bash_profile
 
 # Install the latest stable version of node.js
 echo -e "${lightblue}${sweat_smile} You're enjoying watching me do all the work, aren't you?"
@@ -292,6 +312,12 @@ curl https://s3.amazonaws.com/v-school/tools/git-completion.bash -o ~/.git-compl
 # zsh comes with completion built in, just need to enable it.
 
 # Add git bash completion scripts to bash_profile
+if grep -Fq '# Git tab completion' ~/.bash_profile
+then
+    echo "Git tab completion code is already in the ~/.bash_profile file. Skipping..."
+else
+
+echo "Git tab completion code is NOT YET in the ~/.bash_profile. Setting up now..."
 cat >> ~/.bash_profile << EOL
 # Git tab completion
 if [ -f ~/.git-completion.bash ]; then
@@ -305,12 +331,26 @@ parse_git_branch() {
 
 EOL
 
+fi
+
 # Update prompt in bash
-echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "' >> ~/.bash_profile
+if grep -Fq 'export PS1="\w\[\033[32m\]\' ~/.bash_profile
+then
+    echo "Prompt update code is already in the ~/.bash_profile file. Skipping..."
+else
+    echo "Prompt update code is NOT YET in the ~/.bash_profile file. Setting up now..."
+    echo 'export PS1="\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\] $ "\n\n' >> ~/.bash_profile
+fi
 
 # Update prompt in zsh
-echo 'export PROMPT="%B%F{blue}%~%f%b $ "' >> ~/.zshrc
-echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
+if grep -Fq 'autoload -Uz compinit && compinit' ~/.zshrc
+then
+    echo "Prompt update code is already in the ~/.zshrc file. Skipping..."
+else
+    echo "Prompt update code is NOT YET in the ~/.zshrc file. Setting up now..."
+    echo 'export PROMPT="%B%F{blue}%~%f%b $ "' >> ~/.zshrc
+    echo 'autoload -Uz compinit && compinit\n\n' >> ~/.zshrc
+fi
 
 # DONE!
 echo -e "${lightblue}${sweat_smile} Alright! That's everything!"
