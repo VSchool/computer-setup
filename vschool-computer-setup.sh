@@ -349,7 +349,7 @@ then
 else
     echo "Prompt update code is NOT YET in the ~/.zshrc file. Setting up now..."
     echo 'export PROMPT="%B%F{blue}%~%f%b $ "' >> ~/.zshrc
-    echo 'autoload -Uz compinit && compinit\n\n' >> ~/.zshrc
+    echo -e 'autoload -Uz compinit && compinit\n\n' >> ~/.zshrc
 fi
 
 # DONE!
